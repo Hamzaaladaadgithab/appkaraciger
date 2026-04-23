@@ -10,11 +10,13 @@ import { InputField } from '@/components/ui/InputField';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { Colors, Spacing } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const theme = Colors[colorScheme];
   const [text, setText] = useState('');
+  const router = useRouter();
 
   return (
     <ParallaxScrollView
@@ -49,8 +51,8 @@ export default function HomeScreen() {
           />
           
           <PrimaryButton 
-            title="Giriş Yap" 
-            onPress={() => alert('Giriş başarılı!')} 
+            title="Giriş Yap (Test Ekranına Git)" 
+            onPress={() => router.push('/login')} 
             style={{ marginTop: Spacing.md }}
           />
         </GlassCard>
