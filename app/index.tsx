@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
@@ -11,11 +11,22 @@ import { Colors, Spacing } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { auth } from '@/services/firebaseConfig';
 
 export default function DashboardScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const theme = Colors[colorScheme];
   const router = useRouter();
+
+  useEffect(() => {
+    // If there is no authenticated user, redirect to the login screen immediately
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (!user) {
+        router.replace('/login');
+      }
+    });
+    return unsubscribe;
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }} edges={['top']}>
@@ -24,12 +35,15 @@ export default function DashboardScreen() {
         {/* Top Section */}
         <Animated.View entering={FadeInUp.duration(600).springify()} style={styles.header}>
           <View style={styles.greetingContainer}>
-            <ThemedText type="title" style={{ fontSize: 28 }}>Welcome, Alex 👋</ThemedText>
-            <ThemedText style={{ color: theme.textMuted, marginTop: 4 }}>Let's continue your health journey</ThemedText>
+            <ThemedText type="title" style={{ fontSize: 24, color: theme.primary }}>Liver Transplant AR</ThemedText>
+            <ThemedText style={{ color: theme.textMuted, marginTop: 4 }}>Education System Dashboard</ThemedText>
           </View>
-          <View style={styles.avatarContainer}>
+          <TouchableOpacity 
+            style={styles.avatarContainer}
+            onPress={() => alert('Profil ve ayarlar sayfası yakında eklenecek!')}
+          >
             <Ionicons name="person-circle" size={56} color={theme.primary} />
-          </View>
+          </TouchableOpacity>
         </Animated.View>
 
         {/* Score Card */}
