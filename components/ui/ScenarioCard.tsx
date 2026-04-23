@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 
 import { ThemedText } from '@/components/themed-text';
@@ -29,8 +29,8 @@ export function ScenarioCard({ title, iconName, onPress }: ScenarioCardProps) {
   return (
     <AnimatedTouchable
       activeOpacity={1}
-      onPressIn={() => (scale.value = withSpring(0.96, { damping: 10, stiffness: 400 }))}
-      onPressOut={() => (scale.value = withSpring(1, { damping: 10, stiffness: 400 }))}
+      onPressIn={() => (scale.value = withTiming(0.96, { duration: 200 }))}
+      onPressOut={() => (scale.value = withTiming(1, { duration: 200 }))}
       onPress={onPress}
       style={[
         styles.card,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, ViewStyle, TextStyle, StyleProp } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Colors, Shadows, Spacing, BorderRadius } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
@@ -26,11 +26,11 @@ export function PrimaryButton({ title, onPress, style, textStyle, disabled }: Pr
   });
 
   const handlePressIn = () => {
-    scale.value = withSpring(0.95, { damping: 10, stiffness: 400 });
+    scale.value = withTiming(0.95, { duration: 200 });
   };
 
   const handlePressOut = () => {
-    scale.value = withSpring(1, { damping: 10, stiffness: 400 });
+    scale.value = withTiming(1, { duration: 200 });
   };
 
   return (
