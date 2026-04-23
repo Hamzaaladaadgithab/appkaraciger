@@ -10,10 +10,12 @@ import { ScenarioCard } from '@/components/ui/ScenarioCard';
 import { Colors, Spacing } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 
 export default function DashboardScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const theme = Colors[colorScheme];
+  const router = useRouter();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }} edges={['top']}>
@@ -52,7 +54,7 @@ export default function DashboardScreen() {
           <ScenarioCard 
             title="Medication Adherence" 
             iconName="medical" 
-            onPress={() => {}} 
+            onPress={() => router.push('/scenario')} 
           />
           <ScenarioCard 
             title="Complication Awareness" 
