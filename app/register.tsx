@@ -10,6 +10,7 @@ import { GlassCard } from '@/components/ui/GlassCard';
 import { Colors, Spacing } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { ThemedView } from '@/components/themed-view';
+import { AuthManager } from '@/services/AuthManager';
 
 export default function RegisterScreen() {
   const colorScheme = useColorScheme() ?? 'light';
@@ -20,6 +21,24 @@ export default function RegisterScreen() {
   const [age, setAge] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleRegister = async () => {
+    if (!fullName || !email || !password) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+    setLoading(true);
+    try {
+      await AuthManager.signUp(email, password, fullName);
+      alert('Account created successfully!');
+      router.replace('/');
+    } catch (error: any) {
+      alert('Registration failed: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <ThemedView style={styles.container}>
@@ -67,8 +86,9 @@ export default function RegisterScreen() {
               />
               
               <PrimaryButton 
-                title="Register" 
-                onPress={() => alert('Account created successfully!')} 
+                title={loading ? "Registering..." : "Register"} 
+                onPress={handleRegister} 
+                disabled={loading}
                 style={{ marginTop: Spacing.md }}
               />
 

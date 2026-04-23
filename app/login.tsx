@@ -10,6 +10,7 @@ import { GlassCard } from '@/components/ui/GlassCard';
 import { Colors, Spacing } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { ThemedView } from '@/components/themed-view';
+import { AuthManager } from '@/services/AuthManager';
 
 export default function LoginScreen() {
   const colorScheme = useColorScheme() ?? 'light';
@@ -18,6 +19,23 @@ export default function LoginScreen() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      alert('Please fill in all fields.');
+      return;
+    }
+    setLoading(true);
+    try {
+      await AuthManager.signIn(email, password);
+      router.replace('/');
+    } catch (error: any) {
+      alert('Login failed: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <ThemedView style={styles.container}>
@@ -54,8 +72,9 @@ export default function LoginScreen() {
               />
               
               <PrimaryButton 
-                title="Login" 
-                onPress={() => alert('Login successfully!')} 
+                title={loading ? "Logging in..." : "Login"} 
+                onPress={handleLogin} 
+                disabled={loading}
                 style={{ marginTop: Spacing.md }}
               />
 
