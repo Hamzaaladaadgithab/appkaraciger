@@ -1,94 +1,141 @@
-import { Image } from 'expo-image';
-import { StyleSheet, View } from 'react-native';
-import React, { useState } from 'react';
+import React from 'react';
+import { StyleSheet, View, ScrollView } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
-import { InputField } from '@/components/ui/InputField';
 import { GlassCard } from '@/components/ui/GlassCard';
+import { ScenarioCard } from '@/components/ui/ScenarioCard';
 import { Colors, Spacing } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function HomeScreen() {
+export default function DashboardScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const theme = Colors[colorScheme];
-  const [text, setText] = useState('');
-  const router = useRouter();
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: theme.primary, dark: theme.surface }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.container}>
-        <View style={styles.header}>
-          <ThemedText type="title">Liver Transplant</ThemedText>
-          <ThemedText type="subtitle" style={{ color: theme.primary }}>AR Education System</ThemedText>
-        </View>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }} edges={['top']}>
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        
+        {/* Top Section */}
+        <Animated.View entering={FadeInUp.duration(600).springify()} style={styles.header}>
+          <View style={styles.greetingContainer}>
+            <ThemedText type="title" style={{ fontSize: 28 }}>Welcome, Alex 👋</ThemedText>
+            <ThemedText style={{ color: theme.textMuted, marginTop: 4 }}>Let's continue your health journey</ThemedText>
+          </View>
+          <View style={styles.avatarContainer}>
+            <Ionicons name="person-circle" size={56} color={theme.primary} />
+          </View>
+        </Animated.View>
 
-        <GlassCard style={styles.card}>
-          <ThemedText type="defaultSemiBold" style={styles.cardTitle}>Giriş Yap</ThemedText>
-          <ThemedText style={styles.cardDesc}>Devam etmek için bilgilerinizi giriniz.</ThemedText>
+        {/* Score Card */}
+        <Animated.View entering={FadeInUp.duration(700).springify().delay(100)}>
+          <GlassCard style={[styles.scoreCard, { backgroundColor: theme.primary }]} intensity={80}>
+            <View style={styles.scoreContent}>
+              <View>
+                <ThemedText style={{ color: '#fff', opacity: 0.9, fontSize: 14 }}>Your Progress</ThemedText>
+                <ThemedText type="title" style={{ color: '#fff', fontSize: 32, marginTop: 4 }}>150 Points</ThemedText>
+              </View>
+              <View style={styles.iconCircle}>
+                <Ionicons name="star" size={28} color={theme.primary} />
+              </View>
+            </View>
+          </GlassCard>
+        </Animated.View>
+
+        {/* Scenarios */}
+        <Animated.View entering={FadeInUp.duration(800).springify().delay(200)} style={styles.section}>
+          <ThemedText type="subtitle" style={styles.sectionTitle}>Training Scenarios</ThemedText>
           
-          <InputField 
-            label="Kullanıcı Adı veya E-posta" 
-            value={text}
-            onChangeText={setText}
-            placeholder=""
+          <ScenarioCard 
+            title="Medication Adherence" 
+            iconName="medical" 
+            onPress={() => {}} 
           />
-          
-          <InputField 
-            label="Şifre" 
-            secureTextEntry
-            placeholder=""
+          <ScenarioCard 
+            title="Complication Awareness" 
+            iconName="warning" 
+            onPress={() => {}} 
           />
-          
+          <ScenarioCard 
+            title="Psychological Support" 
+            iconName="heart" 
+            onPress={() => {}} 
+          />
+        </Animated.View>
+
+        {/* Bottom CTA */}
+        <Animated.View entering={FadeInUp.duration(900).springify().delay(300)} style={styles.bottomSection}>
           <PrimaryButton 
-            title="Giriş Yap (Test Ekranına Git)" 
-            onPress={() => router.push('/login')} 
-            style={{ marginTop: Spacing.md }}
+            title="Start AR Training" 
+            onPress={() => alert('Starting AR...')}
+            style={styles.ctaButton}
           />
-        </GlassCard>
+        </Animated.View>
 
-      </ThemedView>
-    </ParallaxScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: Spacing.md,
-    gap: Spacing.xl,
+  scrollContent: {
+    flexGrow: 1,
+    padding: Spacing.lg,
+    paddingBottom: Spacing.xxl * 2,
   },
   header: {
-    gap: Spacing.xs,
-    marginTop: Spacing.md,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: Spacing.xl,
   },
-  card: {
-    marginTop: Spacing.sm,
+  greetingContainer: {
+    flex: 1,
+    paddingRight: Spacing.md,
   },
-  cardTitle: {
-    fontSize: 20,
-    marginBottom: Spacing.xs,
+  avatarContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  cardDesc: {
-    marginBottom: Spacing.lg,
-    opacity: 0.8,
+  scoreCard: {
+    marginBottom: Spacing.xl,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-    opacity: 0.5,
+  scoreContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  iconCircle: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: 'rgba(255,255,255,0.95)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  section: {
+    marginBottom: Spacing.xl,
+  },
+  sectionTitle: {
+    marginBottom: Spacing.md,
+    fontSize: 18,
+  },
+  bottomSection: {
+    marginTop: 'auto',
+    paddingTop: Spacing.lg,
+  },
+  ctaButton: {
+    width: '100%',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 20,
   },
 });
 
