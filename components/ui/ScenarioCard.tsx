@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Pressable, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -7,7 +7,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Colors, Spacing, BorderRadius, Shadows } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
-const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 interface ScenarioCardProps {
   title: string;
@@ -27,8 +27,7 @@ export function ScenarioCard({ title, iconName, onPress }: ScenarioCardProps) {
   });
 
   return (
-    <AnimatedTouchable
-      activeOpacity={1}
+    <AnimatedPressable
       onPressIn={() => (scale.value = withTiming(0.96, { duration: 200 }))}
       onPressOut={() => (scale.value = withTiming(1, { duration: 200 }))}
       onPress={onPress}
@@ -46,7 +45,7 @@ export function ScenarioCard({ title, iconName, onPress }: ScenarioCardProps) {
         <ThemedText type="defaultSemiBold" style={styles.title}>{title}</ThemedText>
         <Ionicons name="chevron-forward" size={20} color={theme.textMuted} />
       </View>
-    </AnimatedTouchable>
+    </AnimatedPressable>
   );
 }
 

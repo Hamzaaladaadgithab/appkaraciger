@@ -59,12 +59,12 @@ export default function DashboardScreen() {
           <ScenarioCard 
             title="Complication Awareness" 
             iconName="warning" 
-            onPress={() => {}} 
+            onPress={() => alert('Bu senaryo yapım aşamasında!')} 
           />
           <ScenarioCard 
             title="Psychological Support" 
             iconName="heart" 
-            onPress={() => {}} 
+            onPress={() => alert('Bu senaryo yapım aşamasında!')} 
           />
         </Animated.View>
 
