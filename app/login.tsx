@@ -31,7 +31,15 @@ export default function LoginScreen() {
       await AuthManager.signIn(email, password);
       router.replace('/');
     } catch (error: any) {
-      alert('Login failed: ' + error.message);
+      let errorMessage = 'Giriş başarısız oldu. Lütfen tekrar deneyin.';
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+        errorMessage = 'E-posta adresi veya şifre hatalı. Hesabınız yoksa lütfen önce kayıt olun.';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Geçersiz bir e-posta formatı girdiniz.';
+      } else if (error.code === 'auth/user-disabled') {
+        errorMessage = 'Bu hesap sistem tarafından engellenmiş.';
+      }
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }

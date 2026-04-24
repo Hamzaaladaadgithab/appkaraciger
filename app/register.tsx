@@ -34,7 +34,15 @@ export default function RegisterScreen() {
       alert('Account created successfully!');
       router.replace('/');
     } catch (error: any) {
-      alert('Registration failed: ' + error.message);
+      let errorMessage = 'Kayıt başarısız oldu. Lütfen tekrar deneyin.';
+      if (error.code === 'auth/email-already-in-use') {
+        errorMessage = 'Bu e-posta adresi zaten kullanımda. Lütfen giriş yapmayı deneyin.';
+      } else if (error.code === 'auth/weak-password') {
+        errorMessage = 'Şifreniz çok zayıf. Lütfen en az 6 karakterli daha güçlü bir şifre belirleyin.';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Geçersiz bir e-posta formatı girdiniz.';
+      }
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }
