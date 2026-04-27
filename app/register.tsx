@@ -24,13 +24,18 @@ export default function RegisterScreen() {
   const [loading, setLoading] = useState(false);
 
   const handleRegister = async () => {
-    if (!fullName || !email || !password) {
+    if (!fullName || !email || !password || !age) {
       alert('Please fill in all required fields.');
+      return;
+    }
+    const ageNumber = parseInt(age, 10);
+    if (isNaN(ageNumber)) {
+      alert('Lütfen geçerli bir yaş girin.');
       return;
     }
     setLoading(true);
     try {
-      await AuthManager.signUp(email, password, fullName);
+      await AuthManager.signUp(email, password, fullName, ageNumber);
       alert('Account created successfully!');
       router.replace('/');
     } catch (error: any) {

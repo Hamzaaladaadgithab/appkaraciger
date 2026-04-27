@@ -4,16 +4,18 @@ import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from './firebaseConfig';
 
 export class AuthManager {
-  static async signUp(email: string, pass: string, name: string): Promise<User | null> {
+  static async signUp(email: string, pass: string, fullName: string, age: number): Promise<User | null> {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
       const uid = userCredential.user.uid;
 
       const newUser: User = {
         uid,
-        name,
+        fullName,
+        age,
         email,
-        role: 'hasta',
+        totalScore: 0,
+        role: 'patient',
         createdAt: new Date().toISOString()
       };
 

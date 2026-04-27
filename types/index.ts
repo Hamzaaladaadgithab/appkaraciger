@@ -1,8 +1,10 @@
 export interface User {
   uid: string;
-  name: string;
+  fullName: string;
+  age: number;
   email: string;
-  role: string;
+  totalScore: number;
+  role: "patient" | "admin";
   createdAt: string;
 }
 
