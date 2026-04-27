@@ -14,6 +14,7 @@ import { useRouter, useFocusEffect } from 'expo-router';
 import { auth } from '@/services/firebaseConfig';
 import { useAuthStore } from '@/store/authStore';
 import { DatabaseManager } from '@/services/DatabaseManager';
+import { AuthManager } from '@/services/AuthManager';
 import { useCallback, useState } from 'react';
 
 export default function DashboardScreen() {
@@ -23,6 +24,14 @@ export default function DashboardScreen() {
   
   const { user, setUser } = useAuthStore();
   const [loading, setLoading] = useState(true);
+
+  const handleLogout = async () => {
+    try {
+      await AuthManager.signOut();
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -58,12 +67,20 @@ export default function DashboardScreen() {
             <ThemedText style={{ color: theme.textMuted, marginTop: 4, fontSize: 16 }}>Welcome back,</ThemedText>
             <ThemedText type="title" style={{ fontSize: 28, color: theme.primary }}>{user?.fullName || 'Patient'}</ThemedText>
           </View>
-          <TouchableOpacity 
-            style={styles.avatarContainer}
-            onPress={() => alert('Profil ve ayarlar sayfası yakında eklenecek!')}
-          >
-            <Ionicons name="person-circle" size={56} color={theme.primary} />
-          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <TouchableOpacity 
+              style={styles.logoutButton}
+              onPress={handleLogout}
+            >
+              <Ionicons name="log-out-outline" size={24} color="#ef4444" />
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.avatarContainer}
+              onPress={() => router.push('/profile' as any)}
+            >
+              <Ionicons name="person-circle" size={56} color={theme.primary} />
+            </TouchableOpacity>
+          </View>
         </Animated.View>
 
         {/* Score Card */}
@@ -139,6 +156,15 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  logoutButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: Spacing.sm,
   },
   scoreCard: {
     marginBottom: Spacing.xl,
