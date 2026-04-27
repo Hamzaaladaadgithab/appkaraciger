@@ -18,16 +18,6 @@ export default function DashboardScreen() {
   const theme = Colors[colorScheme];
   const router = useRouter();
 
-  useEffect(() => {
-    // If there is no authenticated user, redirect to the login screen immediately
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (!user) {
-        router.replace('/login');
-      }
-    });
-    return unsubscribe;
-  }, []);
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }} edges={['top']}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
