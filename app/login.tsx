@@ -29,7 +29,7 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       await AuthManager.signIn(email, password);
-      router.replace('/');
+      // Let the global Auth Guard handle routing after state updates
     } catch (error: any) {
       let errorMessage = 'Giriş başarısız oldu. Lütfen tekrar deneyin.';
       if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {

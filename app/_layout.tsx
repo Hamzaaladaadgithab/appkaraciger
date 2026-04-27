@@ -11,6 +11,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { useAuthStore } from '@/store/authStore';
 import { Colors } from '@/constants/theme';
 import { User } from '@/types';
+import { User as FirebaseUser } from 'firebase/auth';
 import { AuthManager } from '@/services/AuthManager';
 
 export const unstable_settings = {
@@ -24,10 +25,10 @@ export default function RootLayout() {
   const segments = useSegments();
   
   const [isReady, setIsReady] = useState(false);
-  const { setUser, clearUser } = useAuthStore();
+  const { user, setUser, clearUser } = useAuthStore();
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
+    const unsubscribe = auth.onAuthStateChanged(async (firebaseUser: FirebaseUser | null) => {
       try {
         if (firebaseUser) {
           // Fetch user document from Firestore
@@ -36,27 +37,17 @@ export default function RootLayout() {
           if (userDoc.exists()) {
             const userData = userDoc.data() as User;
             setUser(userData);
-            
-            // Route based on user role
-            if (userData.role === 'admin') {
-              router.replace('/(admin)/dashboard');
-            } else {
-              router.replace('/');
-            }
           } else {
             console.error("User document not found in Firestore!");
             await AuthManager.signOut();
             clearUser();
-            router.replace('/login');
           }
         } else {
           clearUser();
-          router.replace('/login');
         }
       } catch (error) {
         console.error("Auth Guard Error:", error);
         clearUser();
-        router.replace('/login');
       } finally {
         setIsReady(true);
       }
@@ -64,6 +55,22 @@ export default function RootLayout() {
 
     return unsubscribe;
   }, []); // Run once on mount
+
+  useEffect(() => {
+    if (!isReady) return;
+
+    const inAuthGroup = segments[0] === 'login' || segments[0] === 'register';
+
+    if (!user && !inAuthGroup) {
+      router.replace('/login');
+    } else if (user) {
+      if (user.role === 'admin' && segments[0] !== '(admin)') {
+        router.replace('/(admin)/dashboard');
+      } else if (user.role !== 'admin' && (inAuthGroup || segments[0] === '(admin)')) {
+        router.replace('/');
+      }
+    }
+  }, [user, isReady, segments]);
 
   if (!isReady) {
     return (

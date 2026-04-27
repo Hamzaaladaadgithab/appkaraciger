@@ -37,7 +37,7 @@ export default function RegisterScreen() {
     try {
       await AuthManager.signUp(email, password, fullName, ageNumber);
       alert('Account created successfully!');
-      router.replace('/');
+      // Let the global Auth Guard handle routing after state updates
     } catch (error: any) {
       let errorMessage = 'Kayıt başarısız oldu. Lütfen tekrar deneyin.';
       if (error.code === 'auth/email-already-in-use') {
