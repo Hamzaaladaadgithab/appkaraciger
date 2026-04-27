@@ -173,7 +173,7 @@ export default function AdminDashboard() {
         {/* Edit Score Modal */}
         <Modal visible={isModalVisible} transparent={true} animationType="fade">
           <View style={styles.modalOverlay}>
-            <View style={[styles.modalContent, { backgroundColor: theme.card }]}>
+            <View style={[styles.modalContent, { backgroundColor: theme.surface }]}>
               <ThemedText type="subtitle" style={{ marginBottom: Spacing.md }}>Edit Total Score</ThemedText>
               <ThemedText style={{ opacity: 0.7, marginBottom: Spacing.lg }}>
                 Update score for {selectedUser?.fullName}

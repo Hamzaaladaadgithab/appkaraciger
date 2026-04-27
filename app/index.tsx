@@ -10,13 +10,43 @@ import { ScenarioCard } from '@/components/ui/ScenarioCard';
 import { Colors, Spacing } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { auth } from '@/services/firebaseConfig';
+import { useAuthStore } from '@/store/authStore';
+import { DatabaseManager } from '@/services/DatabaseManager';
+import { useCallback, useState } from 'react';
 
 export default function DashboardScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const theme = Colors[colorScheme];
   const router = useRouter();
+  
+  const { user, setUser } = useAuthStore();
+  const [loading, setLoading] = useState(true);
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchUserData = async () => {
+        if (user?.uid) {
+          const updatedUser = await DatabaseManager.getUser(user.uid);
+          if (updatedUser) {
+            setUser(updatedUser);
+          }
+        }
+        setLoading(false);
+      };
+      
+      fetchUserData();
+    }, [user?.uid])
+  );
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.background }}>
+        <ActivityIndicator size="large" color={theme.primary} />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }} edges={['top']}>
@@ -25,8 +55,8 @@ export default function DashboardScreen() {
         {/* Top Section */}
         <Animated.View entering={FadeInUp.duration(600).springify()} style={styles.header}>
           <View style={styles.greetingContainer}>
-            <ThemedText type="title" style={{ fontSize: 24, color: theme.primary }}>Liver Transplant AR</ThemedText>
-            <ThemedText style={{ color: theme.textMuted, marginTop: 4 }}>Education System Dashboard</ThemedText>
+            <ThemedText style={{ color: theme.textMuted, marginTop: 4, fontSize: 16 }}>Welcome back,</ThemedText>
+            <ThemedText type="title" style={{ fontSize: 28, color: theme.primary }}>{user?.fullName || 'Patient'}</ThemedText>
           </View>
           <TouchableOpacity 
             style={styles.avatarContainer}
@@ -42,7 +72,7 @@ export default function DashboardScreen() {
             <View style={styles.scoreContent}>
               <View>
                 <ThemedText style={{ color: '#fff', opacity: 0.9, fontSize: 14 }}>Your Progress</ThemedText>
-                <ThemedText type="title" style={{ color: '#fff', fontSize: 32, marginTop: 4 }}>150 Points</ThemedText>
+                <ThemedText type="title" style={{ color: '#fff', fontSize: 32, marginTop: 4 }}>{user?.totalScore || 0} Points</ThemedText>
               </View>
               <View style={styles.iconCircle}>
                 <Ionicons name="star" size={28} color={theme.primary} />

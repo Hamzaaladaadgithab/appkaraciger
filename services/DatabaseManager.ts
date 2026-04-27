@@ -4,6 +4,20 @@ import { SessionLog, Progress, Scenario, User } from '@/types';
 
 export class DatabaseManager {
   
+  static async getUser(uid: string): Promise<User | null> {
+    try {
+      const docRef = doc(db, 'users', uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        return docSnap.data() as User;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      return null;
+    }
+  }
+  
   static async getPatients(): Promise<User[]> {
     try {
       const usersRef = collection(db, 'users');
