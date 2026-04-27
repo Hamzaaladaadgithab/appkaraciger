@@ -71,21 +71,18 @@ export class DatabaseManager {
     }
   }
 
-  static async saveSessionLog(log: Omit<SessionLog, 'logId' | 'ts'>): Promise<string> {
+  static async saveSessionLog(log: SessionLog): Promise<string> {
     try {
-      const newLogRef = doc(collection(db, 'session_logs'));
+      const newLogRef = doc(collection(db, 'sessionLogs'));
       const logData: SessionLog = {
         ...log,
         logId: newLogRef.id,
-        ts: new Date().toISOString()
+        timestamp: new Date().toISOString()
       };
       
       // Save the log
       await setDoc(newLogRef, logData);
       
-      // Update the user's progress 1-to-1 document
-      await this.updateUserProgress(log.userId, log.scenarioId, log.score);
-
       return newLogRef.id;
     } catch (error) {
       console.error("Error saving session log:", error);

@@ -29,13 +29,11 @@ export interface Scenario {
 }
 
 export interface SessionLog {
-  logId: string;
+  logId?: string;
   userId: string;
   scenarioId: string;
-  decisions: string[]; // Array of chosen decision IDs
-  score: number;
-  duration: number;
-  ts: string; // Timestamp
+  action: 'correct' | 'wrong';
+  timestamp: string;
 }
 
 export interface Progress {

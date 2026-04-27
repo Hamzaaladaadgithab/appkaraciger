@@ -24,6 +24,15 @@ export default function ScenarioScreen() {
     
     if (isCorrect) {
       setLoading(true);
+      
+      // Save to sessionLogs
+      await DatabaseManager.saveSessionLog({
+        userId: user.uid,
+        scenarioId: 'medication_adherence_01',
+        action: 'correct',
+        timestamp: new Date().toISOString()
+      });
+
       const newScore = (user.totalScore || 0) + 10;
       const success = await DatabaseManager.updateUserScore(user.uid, newScore);
       setLoading(false);
@@ -37,6 +46,15 @@ export default function ScenarioScreen() {
         Alert.alert('Hata', 'Puan kaydedilemedi.');
       }
     } else {
+      setLoading(true);
+      await DatabaseManager.saveSessionLog({
+        userId: user.uid,
+        scenarioId: 'medication_adherence_01',
+        action: 'wrong',
+        timestamp: new Date().toISOString()
+      });
+      setLoading(false);
+
       Alert.alert('Yanlış Karar', 'Önce sağlık! İlaçlarınızı tam zamanında almalısınız.', [
         { text: 'Anladım', onPress: () => router.back() }
       ]);
