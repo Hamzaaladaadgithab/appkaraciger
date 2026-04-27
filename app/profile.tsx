@@ -74,7 +74,8 @@ export default function ProfileScreen() {
             <Ionicons name="chevron-back" size={28} color={theme.text} />
           </TouchableOpacity>
           <ThemedText type="title" style={{ fontSize: 24 }}>Profil</ThemedText>
-          <View style={{ width: 28 }} /> {/* Spacer for centering */}
+          <View style={{ width: 28 }} />
+          {/* Spacer for centering */}
         </Animated.View>
 
         {/* Top Section: Avatar & Info */}
