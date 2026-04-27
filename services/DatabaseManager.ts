@@ -1,9 +1,26 @@
 import { db } from './firebaseConfig';
-import { doc, setDoc, getDoc, updateDoc, collection } from 'firebase/firestore';
-import { SessionLog, Progress, Scenario } from '@/types';
+import { doc, setDoc, getDoc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { SessionLog, Progress, Scenario, User } from '@/types';
 
 export class DatabaseManager {
   
+  static async getPatients(): Promise<User[]> {
+    try {
+      const usersRef = collection(db, 'users');
+      const q = query(usersRef, where('role', '==', 'patient'));
+      const querySnapshot = await getDocs(q);
+      
+      const patients: User[] = [];
+      querySnapshot.forEach((docSnap) => {
+        patients.push(docSnap.data() as User);
+      });
+      return patients;
+    } catch (error) {
+      console.error("Error fetching patients:", error);
+      return [];
+    }
+  }
+
   static async getDecisionTree(scenarioId: string): Promise<Scenario | null> {
     try {
       const docRef = doc(db, 'scenarios', scenarioId);
