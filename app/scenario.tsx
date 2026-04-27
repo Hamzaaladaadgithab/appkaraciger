@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, View, ImageBackground, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, ImageBackground, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
@@ -11,9 +11,37 @@ import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { SecondaryButton } from '@/components/ui/SecondaryButton';
 import { Colors, Spacing, BorderRadius } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useAuthStore } from '@/store/authStore';
+import { DatabaseManager } from '@/services/DatabaseManager';
 
 export default function ScenarioScreen() {
   const router = useRouter();
+  const { user, setUser } = useAuthStore();
+  const [loading, setLoading] = useState(false);
+
+  const handleDecision = async (isCorrect: boolean) => {
+    if (!user) return;
+    
+    if (isCorrect) {
+      setLoading(true);
+      const newScore = (user.totalScore || 0) + 10;
+      const success = await DatabaseManager.updateUserScore(user.uid, newScore);
+      setLoading(false);
+      
+      if (success) {
+        setUser({ ...user, totalScore: newScore });
+        Alert.alert('Doğru Karar!', 'Tebrikler, +10 Puan kazandınız!', [
+          { text: 'Devam Et', onPress: () => router.back() }
+        ]);
+      } else {
+        Alert.alert('Hata', 'Puan kaydedilemedi.');
+      }
+    } else {
+      Alert.alert('Yanlış Karar', 'Önce sağlık! İlaçlarınızı tam zamanında almalısınız.', [
+        { text: 'Anladım', onPress: () => router.back() }
+      ]);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -34,7 +62,7 @@ export default function ScenarioScreen() {
           </TouchableOpacity>
           <View style={styles.scorePill}>
             <Ionicons name="star" size={16} color="#FBBF24" style={{ marginRight: 4 }} />
-            <ThemedText style={{ color: '#FFF', fontWeight: 'bold' }}>150</ThemedText>
+            <ThemedText style={{ color: '#FFF', fontWeight: 'bold' }}>{user?.totalScore || 0}</ThemedText>
           </View>
         </Animated.View>
 
@@ -49,13 +77,15 @@ export default function ScenarioScreen() {
 
             <View style={styles.buttonGroup}>
               <PrimaryButton 
-                title="Take Now" 
-                onPress={() => alert('+10 Points! Good job!')} 
+                title={loading ? "Kaydediliyor..." : "Şimdi İç"} 
+                onPress={() => handleDecision(true)} 
+                disabled={loading}
                 style={styles.buttonSpacing} 
               />
               <SecondaryButton 
-                title="Take Later" 
-                onPress={() => alert('Health first! Try to take it on time.')} 
+                title="Daha Sonra İç" 
+                disabled={loading}
+                onPress={() => handleDecision(false)} 
               />
             </View>
           </BlurView>
