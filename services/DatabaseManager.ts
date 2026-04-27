@@ -1,5 +1,5 @@
 import { db } from './firebaseConfig';
-import { doc, setDoc, getDoc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, setDoc, getDoc, updateDoc, collection, query, where, getDocs, deleteDoc } from 'firebase/firestore';
 import { SessionLog, Progress, Scenario, User } from '@/types';
 
 export class DatabaseManager {
@@ -18,6 +18,28 @@ export class DatabaseManager {
     } catch (error) {
       console.error("Error fetching patients:", error);
       return [];
+    }
+  }
+
+  static async updateUserScore(uid: string, newScore: number): Promise<boolean> {
+    try {
+      const userRef = doc(db, 'users', uid);
+      await updateDoc(userRef, { totalScore: newScore });
+      return true;
+    } catch (error) {
+      console.error("Error updating user score:", error);
+      return false;
+    }
+  }
+
+  static async deleteUser(uid: string): Promise<boolean> {
+    try {
+      const userRef = doc(db, 'users', uid);
+      await deleteDoc(userRef);
+      return true;
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      return false;
     }
   }
 
