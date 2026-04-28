@@ -6,6 +6,12 @@ export interface User {
   totalScore: number;
   role: "patient" | "admin";
   createdAt: string;
+  // Optional medical fields (patient-specific)
+  transplantDate?: string;       // ISO date string e.g. "2024-03-15"
+  diseaseStatus?: string;        // e.g. "Stabil", "İyileşme sürecinde"
+  hospitalName?: string;         // e.g. "Hacettepe Üniversitesi Hastanesi"
+  doctorName?: string;           // e.g. "Dr. Ahmet Yılmaz"
+  photoURL?: string;             // Firebase Storage URL or null
 }
 
 export interface ScenarioStep {
