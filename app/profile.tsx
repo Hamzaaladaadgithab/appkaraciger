@@ -113,9 +113,9 @@ export default function ProfileScreen() {
           {/* Menu List */}
           <Animated.View entering={FadeInUp.duration(700).delay(300)} style={styles.menuSection}>
             <View style={[styles.menuListContainer, { backgroundColor: theme.surface }]}>
-              <MenuItem icon="person-outline" title="Kişisel Bilgiler" theme={theme} isLast={false} />
-              <MenuItem icon="stats-chart-outline" title="İstatistiklerim" theme={theme} isLast={false} />
-              <MenuItem icon="settings-outline" title="Ayarlar" theme={theme} isLast={true} />
+              <MenuItem icon="person-outline" title="Kişisel Bilgiler" theme={theme} isLast={false} onPress={() => router.push('/personal-info' as any)} />
+              <MenuItem icon="stats-chart-outline" title="İstatistiklerim" theme={theme} isLast={false} onPress={() => router.push('/statistics' as any)} />
+              <MenuItem icon="settings-outline" title="Ayarlar" theme={theme} isLast={true} onPress={() => router.push('/settings' as any)} />
             </View>
           </Animated.View>
 
@@ -144,9 +144,13 @@ export default function ProfileScreen() {
 }
 
 // Helper component for menu items
-function MenuItem({ icon, title, theme, isLast }: { icon: keyof typeof Ionicons.glyphMap, title: string, theme: any, isLast: boolean }) {
+function MenuItem({ icon, title, theme, isLast, onPress }: { icon: keyof typeof Ionicons.glyphMap, title: string, theme: any, isLast: boolean, onPress: () => void }) {
   return (
-    <TouchableOpacity style={[styles.menuItem, !isLast && { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: 'rgba(150, 150, 150, 0.2)' }]}>
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.7}
+      style={[styles.menuItem, !isLast && { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: 'rgba(150, 150, 150, 0.2)' }]}
+    >
       <View style={styles.menuItemLeft}>
         <View style={[styles.menuIconContainer, { backgroundColor: 'rgba(150, 150, 150, 0.1)' }]}>
           <Ionicons name={icon} size={20} color={theme.primary} />
