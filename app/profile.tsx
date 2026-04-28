@@ -84,7 +84,7 @@ export default function ProfileScreen() {
           
           {/* Top Section: Avatar & Info */}
           <Animated.View entering={FadeInUp.duration(500).delay(100)} style={styles.topSection}>
-            <View style={[styles.avatarCircle, { backgroundColor: theme.card }]}>
+            <View style={[styles.avatarCircle, { backgroundColor: theme.surface }]}>
               <ThemedText style={[styles.avatarText, { color: theme.primary }]}>
                 {avatarLetter}
               </ThemedText>
@@ -112,7 +112,7 @@ export default function ProfileScreen() {
 
           {/* Menu List */}
           <Animated.View entering={FadeInUp.duration(700).delay(300)} style={styles.menuSection}>
-            <View style={[styles.menuListContainer, { backgroundColor: theme.card }]}>
+            <View style={[styles.menuListContainer, { backgroundColor: theme.surface }]}>
               <MenuItem icon="person-outline" title="Kişisel Bilgiler" theme={theme} isLast={false} />
               <MenuItem icon="stats-chart-outline" title="İstatistiklerim" theme={theme} isLast={false} />
               <MenuItem icon="settings-outline" title="Ayarlar" theme={theme} isLast={true} />
