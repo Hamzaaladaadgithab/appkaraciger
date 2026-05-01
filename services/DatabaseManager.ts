@@ -49,6 +49,10 @@ export class DatabaseManager {
   static async deleteUser(uid: string): Promise<boolean> {
     try {
       const userRef = doc(db, 'users', uid);
+      // NOTE:
+      // This deletes the user from Firestore only.
+      // Firebase Auth user deletion requires Firebase Admin SDK (Cloud Functions).
+      // The user's Auth account will remain active until a Cloud Function is implemented.
       await deleteDoc(userRef);
       return true;
     } catch (error) {
@@ -86,7 +90,7 @@ export class DatabaseManager {
       return newLogRef.id;
     } catch (error) {
       console.error("Error saving session log:", error);
-      throw error;
+      return '';
     }
   }
 

@@ -9,10 +9,10 @@ interface SettingsState {
   notificationsEnabled: boolean;
   soundEnabled: boolean;
   language: Language;
-  setThemeMode: (mode: ThemeMode) => void;
-  setNotificationsEnabled: (value: boolean) => void;
-  setSoundEnabled: (value: boolean) => void;
-  setLanguage: (lang: Language) => void;
+  setThemeMode: (mode: ThemeMode) => Promise<void>;
+  setNotificationsEnabled: (value: boolean) => Promise<void>;
+  setSoundEnabled: (value: boolean) => Promise<void>;
+  setLanguage: (lang: Language) => Promise<void>;
   loadSettings: () => Promise<void>;
 }
 
