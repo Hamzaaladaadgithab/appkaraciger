@@ -83,8 +83,10 @@ export function LiverModelViewer({ colorState = 'default', style }: LiverModelVi
       const gltf = await loadAsync(asset.localUri as string);
 
       const model: Object3D = gltf.scene;
-      model.scale.set(1.5, 1.5, 1.5);
-      model.position.set(0, -0.3, 0);
+      // Modeli büyütüyoruz (1.5'ten 3.5'e çıkarıldı)
+      model.scale.set(3.5, 3.5, 3.5);
+      // Ekranın tam ortasında durması için Y pozisyonu hafif aşağı alındı
+      model.position.set(0, -0.6, 0);
       scene.add(model);
 
       // Tüm mesh'leri topla (renk değişimi için)

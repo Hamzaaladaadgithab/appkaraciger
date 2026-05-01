@@ -1,9 +1,29 @@
 import { useEffect, useState } from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, ActivityIndicator, StyleSheet, Image as RNImage } from 'react-native';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
+
+// --- POLYFILL CRASH FIX ---
+// expo-three'nin DOM polyfill'i (HTMLImageElement) Firebase WebChannel ile çakışıp
+// Image.getSize'a obje gönderiyor ve uygulamayı çökertiyor. Bunu burada engelliyoruz.
+const originalGetSize = RNImage.getSize;
+// @ts-ignore
+RNImage.getSize = function (uri: any, success?: any, failure?: any) {
+  if (typeof uri !== 'string') {
+    // Hata fırlatmak Firestore'u panikletebiliyor (INTERNAL ASSERTION FAILED).
+    // Bunun yerine sahte bir başarılı yükleme (0x0 boyut) döndürerek Firebase'i kandırıyoruz.
+    if (success) {
+      try {
+        success(0, 0);
+      } catch (e) {}
+    }
+    return;
+  }
+  return originalGetSize(uri, success, failure);
+};
+// --------------------------
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { auth, db } from '@/services/firebaseConfig';

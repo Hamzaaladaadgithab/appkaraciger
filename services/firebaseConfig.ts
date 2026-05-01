@@ -1,7 +1,7 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 // @ts-ignore
 import { initializeAuth, getReactNativePersistence, getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { initializeFirestore } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const firebaseConfig = {
@@ -28,4 +28,17 @@ try {
 }
 
 export { auth };
-export const db = getFirestore(app);
+
+// Firebase'in WebChannel'ı, 'global.Image' objesini görürse sorunlu Image Beacon yöntemini dener.
+// expo-three bu objeyi sahte (polyfill) olarak yarattığı için çökme yaşanır.
+// Firestore'u başlatırken bu objeyi anlık olarak saklayarak Firebase'i standart bağlantıya zorluyoruz.
+const tempImage = global.Image;
+global.Image = undefined as any;
+
+export const db = initializeFirestore(app, {
+  experimentalForceLongPolling: true
+});
+
+// İşlem bitince expo-three'nin kullanabilmesi için geri yüklüyoruz
+global.Image = tempImage;
+
