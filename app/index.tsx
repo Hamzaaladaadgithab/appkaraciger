@@ -110,12 +110,12 @@ export default function DashboardScreen() {
           <ScenarioCard 
             title="Komplikasyon Farkındalığı" 
             iconName="warning" 
-            onPress={() => alert('Bu senaryo yapım aşamasında!')} 
+            onPress={() => router.push('/scenario-komplikasyon' as any)} 
           />
           <ScenarioCard 
             title="Psikolojik Destek" 
             iconName="heart" 
-            onPress={() => alert('Bu senaryo yapım aşamasında!')} 
+            onPress={() => router.push('/scenario-psikoloji' as any)} 
           />
         </Animated.View>
 
@@ -123,7 +123,7 @@ export default function DashboardScreen() {
         <Animated.View entering={FadeInUp.duration(900).springify().delay(300)} style={styles.bottomSection}>
           <PrimaryButton 
             title="AR Eğitimini Başlat" 
-            onPress={() => alert('AR başlatılıyor...')}
+            onPress={() => router.push('/scenario')}
             style={styles.ctaButton}
           />
         </Animated.View>

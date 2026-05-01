@@ -88,6 +88,8 @@ export default function RootLayout() {
         <Stack.Screen name="register" options={{ headerShown: false }} />
         <Stack.Screen name="(admin)/dashboard" options={{ headerShown: false }} />
         <Stack.Screen name="scenario" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
+        <Stack.Screen name="scenario-komplikasyon" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
+        <Stack.Screen name="scenario-psikoloji" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
       </Stack>
       <StatusBar style="auto" />
