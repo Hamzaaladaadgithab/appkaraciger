@@ -58,13 +58,24 @@ export default function ScenarioPsikolojiScreen() {
         action: 'wrong',
         timestamp: new Date().toISOString()
       });
+
+      // 5 Puan sil (0'ın altına düşmesin)
+      const currentScore = user.totalScore || 0;
+      const newScore = Math.max(0, currentScore - 5);
+      const success = await DatabaseManager.updateUserScore(user.uid, newScore);
+      
       setLoading(false);
 
-      Alert.alert(
-        'Unutmayın ⚠️',
-        'Nakil sonrası endişe ve yalnızlık hissi çok yaygındır. Duygularınızı içinde tutmak iyileşmeyi yavaşlatabilir. Bir uzmandan veya destek grubundan yardım almaktan çekinmeyin.',
-        [{ text: 'Anladım', onPress: () => router.back() }]
-      );
+      if (success) {
+        setUser({ ...user, totalScore: newScore });
+        Alert.alert(
+          'Unutmayın ⚠️',
+          'Nakil sonrası endişe ve yalnızlık hissi çok yaygındır. Duygularınızı içinde tutmak iyileşmeyi yavaşlatabilir. Bir uzmandan veya destek grubundan yardım almaktan çekinmeyin. (-5 Puan)',
+          [{ text: 'Anladım', onPress: () => router.back() }]
+        );
+      } else {
+        Alert.alert('Hata', 'Puan kaydedilemedi.');
+      }
     }
   };
 

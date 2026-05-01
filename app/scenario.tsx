@@ -61,11 +61,24 @@ export default function ScenarioScreen() {
         action: 'wrong',
         timestamp: new Date().toISOString()
       });
+
+      // 5 Puan sil (0'ın altına düşmesin)
+      const currentScore = user.totalScore || 0;
+      const newScore = Math.max(0, currentScore - 5);
+      const success = await DatabaseManager.updateUserScore(user.uid, newScore);
+      
       setLoading(false);
 
-      Alert.alert('Yanlış Karar', '⚠️ Önce sağlık! İlaçlarınızı tam zamanında almalısınız.', [
-        { text: 'Anladım', onPress: () => router.back() }
-      ]);
+      if (success) {
+        setUser({ ...user, totalScore: newScore });
+        Alert.alert(
+          'Uyarı ⚠️',
+          'İlaçlarınızı düzenli almamak organ reddine yol açabilir! Lütfen tedavinize sadık kalın. (-5 Puan)',
+          [{ text: 'Tekrar Dene', onPress: () => router.back() }]
+        );
+      } else {
+        Alert.alert('Hata', 'Puan kaydedilemedi.');
+      }
     }
   };
 

@@ -58,13 +58,24 @@ export default function ScenarioKomplikasyonScreen() {
         action: 'wrong',
         timestamp: new Date().toISOString()
       });
+
+      // 5 Puan sil (0'ın altına düşmesin)
+      const currentScore = user.totalScore || 0;
+      const newScore = Math.max(0, currentScore - 5);
+      const success = await DatabaseManager.updateUserScore(user.uid, newScore);
+      
       setLoading(false);
 
-      Alert.alert(
-        'Dikkat! ⚠️',
-        'Nakil sonrası bacak şişliği, derin ven trombozu gibi ciddi komplikasyonlara işaret edebilir. Beklemek tehlikeli olabilir — her zaman doktorunuzu arayın.',
-        [{ text: 'Anladım', onPress: () => router.back() }]
-      );
+      if (success) {
+        setUser({ ...user, totalScore: newScore });
+        Alert.alert(
+          'Dikkat! ⚠️',
+          'Nakil sonrası bacak şişliği, derin ven trombozu gibi ciddi komplikasyonlara işaret edebilir. Beklemek tehlikeli olabilir — her zaman doktorunuzu arayın. (-5 Puan)',
+          [{ text: 'Anladım', onPress: () => router.back() }]
+        );
+      } else {
+        Alert.alert('Hata', 'Puan kaydedilemedi.');
+      }
     }
   };
 
