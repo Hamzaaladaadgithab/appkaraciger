@@ -64,8 +64,8 @@ export default function DashboardScreen() {
         {/* Top Section */}
         <Animated.View entering={FadeInUp.duration(600).springify()} style={styles.header}>
           <View style={styles.greetingContainer}>
-            <ThemedText style={{ color: theme.textMuted, marginTop: 4, fontSize: 16 }}>Welcome back,</ThemedText>
-            <ThemedText type="title" style={{ fontSize: 28, color: theme.primary }}>{user?.fullName || 'Patient'}</ThemedText>
+            <ThemedText style={{ color: theme.textMuted, marginTop: 4, fontSize: 16 }}>Tekrar hoş geldiniz,</ThemedText>
+            <ThemedText type="title" style={{ fontSize: 28, color: theme.primary }}>{user?.fullName || 'Hasta'}</ThemedText>
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <TouchableOpacity 
@@ -88,8 +88,8 @@ export default function DashboardScreen() {
           <GlassCard style={[styles.scoreCard, { backgroundColor: theme.primary }]} intensity={80}>
             <View style={styles.scoreContent}>
               <View>
-                <ThemedText style={{ color: '#fff', opacity: 0.9, fontSize: 14 }}>Your Progress</ThemedText>
-                <ThemedText type="title" style={{ color: '#fff', fontSize: 32, marginTop: 4 }}>{user?.totalScore || 0} Points</ThemedText>
+                <ThemedText style={{ color: '#fff', opacity: 0.9, fontSize: 14 }}>İlerlemeniz</ThemedText>
+                <ThemedText type="title" style={{ color: '#fff', fontSize: 32, marginTop: 4 }}>{user?.totalScore || 0} Puan</ThemedText>
               </View>
               <View style={styles.iconCircle}>
                 <Ionicons name="star" size={28} color={theme.primary} />
@@ -100,20 +100,20 @@ export default function DashboardScreen() {
 
         {/* Scenarios */}
         <Animated.View entering={FadeInUp.duration(800).springify().delay(200)} style={styles.section}>
-          <ThemedText type="subtitle" style={styles.sectionTitle}>Training Scenarios</ThemedText>
+          <ThemedText type="subtitle" style={styles.sectionTitle}>Eğitim Senaryoları</ThemedText>
           
           <ScenarioCard 
-            title="Medication Adherence" 
+            title="İlaç Uyumu" 
             iconName="medical" 
             onPress={() => router.push('/scenario')} 
           />
           <ScenarioCard 
-            title="Complication Awareness" 
+            title="Komplikasyon Farkındalığı" 
             iconName="warning" 
             onPress={() => alert('Bu senaryo yapım aşamasında!')} 
           />
           <ScenarioCard 
-            title="Psychological Support" 
+            title="Psikolojik Destek" 
             iconName="heart" 
             onPress={() => alert('Bu senaryo yapım aşamasında!')} 
           />
@@ -122,8 +122,8 @@ export default function DashboardScreen() {
         {/* Bottom CTA */}
         <Animated.View entering={FadeInUp.duration(900).springify().delay(300)} style={styles.bottomSection}>
           <PrimaryButton 
-            title="Start AR Training" 
-            onPress={() => alert('Starting AR...')}
+            title="AR Eğitimini Başlat" 
+            onPress={() => alert('AR başlatılıyor...')}
             style={styles.ctaButton}
           />
         </Animated.View>

@@ -90,10 +90,10 @@ export default function ProfileScreen() {
               </ThemedText>
             </View>
             <ThemedText style={[styles.fullName, { color: theme.text }]}>
-              {userData?.fullName || 'User'}
+              {userData?.fullName || 'Kullanıcı'}
             </ThemedText>
             <ThemedText style={[styles.emailText, { color: theme.textMuted }]}>
-              {userData?.email || 'No email available'}
+              {userData?.email || 'E-posta bilgisi yok'}
             </ThemedText>
           </Animated.View>
 

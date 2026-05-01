@@ -108,9 +108,9 @@ export default function AdminDashboard() {
         {/* Header with Title and Logout */}
         <View style={styles.header}>
           <View>
-            <ThemedText type="title" style={{ fontSize: 28, color: theme.primary }}>Admin Panel</ThemedText>
+            <ThemedText type="title" style={{ fontSize: 28, color: theme.primary }}>Yönetici Paneli</ThemedText>
             <ThemedText style={{ color: theme.textMuted, marginTop: 4 }}>
-              Managing patient records
+              Hasta kayıtlarını yönetin
             </ThemedText>
           </View>
           <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
@@ -124,7 +124,7 @@ export default function AdminDashboard() {
             <ActivityIndicator size="large" color={theme.primary} style={{ marginTop: 40 }} />
           ) : patients.length === 0 ? (
             <ThemedText style={{ textAlign: 'center', marginTop: 40, opacity: 0.7 }}>
-              No patients found.
+              Hasta bulunamadı.
             </ThemedText>
           ) : (
             patients.map((patient, index) => (
@@ -142,8 +142,8 @@ export default function AdminDashboard() {
                     </View>
                   </View>
                   <View style={styles.scoreContainer}>
-                    <ThemedText style={{ fontSize: 14, opacity: 0.8 }}>Total Score</ThemedText>
-                    <ThemedText type="subtitle" style={{ color: theme.primary }}>{patient.totalScore || 0} pts</ThemedText>
+                    <ThemedText style={{ fontSize: 14, opacity: 0.8 }}>Toplam Puan</ThemedText>
+                    <ThemedText type="subtitle" style={{ color: theme.primary }}>{patient.totalScore || 0} puan</ThemedText>
                   </View>
 
                   {/* Admin Action Buttons */}
@@ -153,7 +153,7 @@ export default function AdminDashboard() {
                       onPress={() => openEditModal(patient)}
                     >
                       <Ionicons name="pencil" size={16} color="#10b981" />
-                      <ThemedText style={{ color: '#10b981', fontSize: 14, marginLeft: 6, fontWeight: '600' }}>Edit Score</ThemedText>
+                      <ThemedText style={{ color: '#10b981', fontSize: 14, marginLeft: 6, fontWeight: '600' }}>Puan Düzenle</ThemedText>
                     </TouchableOpacity>
 
                     <TouchableOpacity 
@@ -161,7 +161,7 @@ export default function AdminDashboard() {
                       onPress={() => handleDeleteUser(patient)}
                     >
                       <Ionicons name="trash" size={16} color="#ef4444" />
-                      <ThemedText style={{ color: '#ef4444', fontSize: 14, marginLeft: 6, fontWeight: '600' }}>Delete</ThemedText>
+                      <ThemedText style={{ color: '#ef4444', fontSize: 14, marginLeft: 6, fontWeight: '600' }}>Sil</ThemedText>
                     </TouchableOpacity>
                   </View>
                 </GlassCard>
@@ -174,13 +174,13 @@ export default function AdminDashboard() {
         <Modal visible={isModalVisible} transparent={true} animationType="fade">
           <View style={styles.modalOverlay}>
             <View style={[styles.modalContent, { backgroundColor: theme.surface }]}>
-              <ThemedText type="subtitle" style={{ marginBottom: Spacing.md }}>Edit Total Score</ThemedText>
+              <ThemedText type="subtitle" style={{ marginBottom: Spacing.md }}>Toplam Puanı Düzenle</ThemedText>
               <ThemedText style={{ opacity: 0.7, marginBottom: Spacing.lg }}>
-                Update score for {selectedUser?.fullName}
+                {selectedUser?.fullName} adlı hastanın puanını güncelleyin
               </ThemedText>
 
               <InputField 
-                label="New Score" 
+                label="Yeni Puan" 
                 value={newScore}
                 onChangeText={setNewScore}
                 keyboardType="numeric"
@@ -188,12 +188,12 @@ export default function AdminDashboard() {
 
               <View style={styles.modalActions}>
                 <SecondaryButton 
-                  title="Cancel" 
+                  title="İptal" 
                   onPress={() => setModalVisible(false)} 
                   style={{ flex: 1, marginRight: Spacing.sm }}
                 />
                 <PrimaryButton 
-                  title={savingScore ? "Saving..." : "Save"} 
+                  title={savingScore ? "Kaydediliyor..." : "Kaydet"} 
                   onPress={handleSaveScore}
                   disabled={savingScore}
                   style={{ flex: 1, marginLeft: Spacing.sm }}

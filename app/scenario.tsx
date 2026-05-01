@@ -90,7 +90,7 @@ export default function ScenarioScreen() {
             <View style={styles.handle} />
             
             <ThemedText type="title" style={styles.questionText}>
-              It's time to take your medication. What should you do?
+              İlaç alma zamanınız geldi. Ne yapmalısınız?
             </ThemedText>
 
             <View style={styles.buttonGroup}>

@@ -23,7 +23,7 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      alert('Please fill in all fields.');
+      alert('Lütfen tüm alanları doldurun.');
       return;
     }
     setLoading(true);
@@ -55,17 +55,17 @@ export default function LoginScreen() {
         <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
           
           <Animated.View entering={FadeInDown.duration(800).springify()} style={styles.header}>
-            <ThemedText type="title" style={{ fontSize: 32, textAlign: 'center' }}>Liver Transplant</ThemedText>
-            <ThemedText type="subtitle" style={{ color: theme.primary, textAlign: 'center' }}>AR Education System</ThemedText>
+            <ThemedText type="title" style={{ fontSize: 32, textAlign: 'center' }}>Karaciğer Nakli</ThemedText>
+            <ThemedText type="subtitle" style={{ color: theme.primary, textAlign: 'center' }}>AR Eğitim Sistemi</ThemedText>
           </Animated.View>
 
           <Animated.View entering={FadeInUp.duration(1000).springify().delay(200)}>
             <GlassCard style={styles.card}>
-              <ThemedText type="subtitle" style={styles.cardTitle}>Login</ThemedText>
-              <ThemedText style={styles.cardDesc}>Welcome back! Please enter your details.</ThemedText>
+              <ThemedText type="subtitle" style={styles.cardTitle}>Giriş Yap</ThemedText>
+              <ThemedText style={styles.cardDesc}>Tekrar hoş geldiniz! Lütfen bilgilerinizi girin.</ThemedText>
               
               <InputField 
-                label="Email" 
+                label="E-posta" 
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -73,24 +73,24 @@ export default function LoginScreen() {
               />
               
               <InputField 
-                label="Password" 
+                label="Şifre" 
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
               />
               
               <PrimaryButton 
-                title={loading ? "Logging in..." : "Login"} 
+                title={loading ? "Giriş yapılıyor..." : "Giriş Yap"} 
                 onPress={handleLogin} 
                 disabled={loading}
                 style={{ marginTop: Spacing.md }}
               />
 
               <View style={styles.footer}>
-                <ThemedText style={{ opacity: 0.8 }}>Don't have an account?</ThemedText>
+                <ThemedText style={{ opacity: 0.8 }}>Hesabınız yok mu?</ThemedText>
                 <TouchableOpacity onPress={() => router.push('/register')}>
                   <ThemedText type="defaultSemiBold" style={{ color: theme.primary, marginLeft: 4 }}>
-                    Create Account
+                    Hesap Oluştur
                   </ThemedText>
                 </TouchableOpacity>
               </View>

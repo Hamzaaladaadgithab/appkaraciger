@@ -30,9 +30,9 @@ interface Stats {
 // ─── Level System ─────────────────────────────────────────────────────────────
 
 function getLevel(score: number): { label: string; color: string; nextThreshold: number } {
-  if (score >= 150) return { label: 'Advanced',     color: '#f59e0b', nextThreshold: 150 };
-  if (score >= 50)  return { label: 'Intermediate', color: '#3b82f6', nextThreshold: 150 };
-  return               { label: 'Beginner',      color: '#34d399', nextThreshold: 50  };
+  if (score >= 150) return { label: 'İleri Seviye',  color: '#f59e0b', nextThreshold: 150 };
+  if (score >= 50)  return { label: 'Orta Seviye',   color: '#3b82f6', nextThreshold: 150 };
+  return               { label: 'Başlangıç',      color: '#34d399', nextThreshold: 50  };
 }
 
 function getLevelProgress(score: number): number {
@@ -310,7 +310,7 @@ export default function StatisticsScreen() {
                   <ThemedText style={[styles.levelLabel, { color: level.color }]}>{level.label}</ThemedText>
                 </View>
                 <ThemedText style={[styles.levelScore, { color: level.color }]}>
-                  {stats!.totalScore} pts
+                  {stats!.totalScore} puan
                 </ThemedText>
               </View>
               <ThemedText style={[styles.levelSub, { color: theme.textMuted }]}>

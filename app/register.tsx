@@ -25,7 +25,7 @@ export default function RegisterScreen() {
 
   const handleRegister = async () => {
     if (!fullName || !email || !password || !age) {
-      alert('Please fill in all required fields.');
+      alert('Lütfen tüm zorunlu alanları doldurun.');
       return;
     }
     const ageNumber = parseInt(age, 10);
@@ -36,7 +36,7 @@ export default function RegisterScreen() {
     setLoading(true);
     try {
       await AuthManager.signUp(email, password, fullName, ageNumber);
-      alert('Account created successfully!');
+      alert('Hesap başarıyla oluşturuldu!');
       // Let the global Auth Guard handle routing after state updates
     } catch (error: any) {
       let errorMessage = 'Kayıt başarısız oldu. Lütfen tekrar deneyin.';
@@ -63,28 +63,28 @@ export default function RegisterScreen() {
         <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
           
           <Animated.View entering={FadeInDown.duration(800).springify()} style={styles.header}>
-            <ThemedText type="title" style={{ fontSize: 32, textAlign: 'center' }}>Create Account</ThemedText>
-            <ThemedText type="subtitle" style={{ color: theme.primary, textAlign: 'center' }}>Join our AR Platform</ThemedText>
+            <ThemedText type="title" style={{ fontSize: 32, textAlign: 'center' }}>Hesap Oluştur</ThemedText>
+            <ThemedText type="subtitle" style={{ color: theme.primary, textAlign: 'center' }}>AR Platformumuza Katılın</ThemedText>
           </Animated.View>
 
           <Animated.View entering={FadeInUp.duration(1000).springify().delay(200)}>
             <GlassCard style={styles.card}>
               <InputField 
-                label="Full Name" 
+                label="Ad Soyad" 
                 value={fullName}
                 onChangeText={setFullName}
                 autoCapitalize="words"
               />
 
               <InputField 
-                label="Age" 
+                label="Yaş" 
                 value={age}
                 onChangeText={setAge}
                 keyboardType="numeric"
               />
               
               <InputField 
-                label="Email" 
+                label="E-posta" 
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -92,24 +92,24 @@ export default function RegisterScreen() {
               />
               
               <InputField 
-                label="Password" 
+                label="Şifre" 
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
               />
               
               <PrimaryButton 
-                title={loading ? "Registering..." : "Register"} 
+                title={loading ? "Kaydediliyor..." : "Kayıt Ol"} 
                 onPress={handleRegister} 
                 disabled={loading}
                 style={{ marginTop: Spacing.md }}
               />
 
               <View style={styles.footer}>
-                <ThemedText style={{ opacity: 0.8 }}>Already have an account?</ThemedText>
+                <ThemedText style={{ opacity: 0.8 }}>Zaten hesabınız var mı?</ThemedText>
                 <TouchableOpacity onPress={() => router.back()}>
                   <ThemedText type="defaultSemiBold" style={{ color: theme.primary, marginLeft: 4 }}>
-                    Login
+                    Giriş Yap
                   </ThemedText>
                 </TouchableOpacity>
               </View>
