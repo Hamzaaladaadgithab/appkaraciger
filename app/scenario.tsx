@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ImageBackground, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
@@ -9,6 +9,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/themed-text';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { SecondaryButton } from '@/components/ui/SecondaryButton';
+import { LiverModelViewer } from '@/components/ar/LiverModelViewer';
 import { Colors, Spacing, BorderRadius } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useAuthStore } from '@/store/authStore';
@@ -18,13 +19,17 @@ export default function ScenarioScreen() {
   const router = useRouter();
   const { user, setUser } = useAuthStore();
   const [loading, setLoading] = useState(false);
+  // '默认' | 'correct' | 'wrong' — karaciğer rengi
+  const [modelColor, setModelColor] = useState<'default' | 'correct' | 'wrong'>('default');
 
   const handleDecision = async (isCorrect: boolean) => {
     if (!user) return;
-    
+
     if (isCorrect) {
+      // Modeli anında yeşile çevir
+      setModelColor('correct');
       setLoading(true);
-      
+
       // Save to sessionLogs
       await DatabaseManager.saveSessionLog({
         userId: user.uid,
@@ -36,17 +41,20 @@ export default function ScenarioScreen() {
       const newScore = (user.totalScore || 0) + 10;
       const success = await DatabaseManager.updateUserScore(user.uid, newScore);
       setLoading(false);
-      
+
       if (success) {
         setUser({ ...user, totalScore: newScore });
-        Alert.alert('Doğru Karar!', 'Tebrikler, +10 Puan kazandınız!', [
+        Alert.alert('Doğru Karar!', 'Tebrikler, +10 Puan kazandınız! 🟢 Karaciğeriniz sağlıklı görünüyor.', [
           { text: 'Devam Et', onPress: () => router.back() }
         ]);
       } else {
         Alert.alert('Hata', 'Puan kaydedilemedi.');
       }
     } else {
+      // Modeli anında koyu kırmızıya çevir
+      setModelColor('wrong');
       setLoading(true);
+
       await DatabaseManager.saveSessionLog({
         userId: user.uid,
         scenarioId: 'medication_adherence_01',
@@ -55,7 +63,7 @@ export default function ScenarioScreen() {
       });
       setLoading(false);
 
-      Alert.alert('Yanlış Karar', 'Önce sağlık! İlaçlarınızı tam zamanında almalısınız.', [
+      Alert.alert('Yanlış Karar', '⚠️ Önce sağlık! İlaçlarınızı tam zamanında almalısınız.', [
         { text: 'Anladım', onPress: () => router.back() }
       ]);
     }
@@ -63,17 +71,12 @@ export default function ScenarioScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Dark Blurred Background to simulate AR Camera Feed */}
-      <ImageBackground 
-        source={require('@/assets/images/partial-react-logo.png')} 
-        style={StyleSheet.absoluteFillObject}
-        blurRadius={20}
-      >
-        <View style={styles.overlay} />
-      </ImageBackground>
+      {/* Siyah arka plan */}
+      <View style={styles.background} />
 
       <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
-        {/* Top Section */}
+
+        {/* Üst bar — kapat + puan */}
         <Animated.View entering={FadeIn.duration(500)} style={styles.topSection}>
           <TouchableOpacity onPress={() => router.back()} style={styles.iconButton}>
             <Ionicons name="close" size={28} color="#FFF" />
@@ -84,30 +87,41 @@ export default function ScenarioScreen() {
           </View>
         </Animated.View>
 
-        {/* Bottom Floating Panel */}
+        {/* 3D Karaciğer Modeli */}
+        <Animated.View entering={FadeIn.duration(800).delay(200)} style={styles.modelContainer}>
+          <LiverModelViewer colorState={modelColor} style={styles.modelViewer} />
+          {/* Senaryo etiketi */}
+          <View style={styles.scenarioBadge}>
+            <Ionicons name="medical" size={14} color="#34d399" style={{ marginRight: 4 }} />
+            <ThemedText style={styles.scenarioBadgeText}>İlaç Uyumu Senaryosu</ThemedText>
+          </View>
+        </Animated.View>
+
+        {/* Alt panel — soru + butonlar */}
         <Animated.View entering={SlideInDown.duration(600).springify().damping(16)} style={styles.panelContainer}>
           <BlurView intensity={80} tint="dark" style={styles.panel}>
             <View style={styles.handle} />
-            
+
             <ThemedText type="title" style={styles.questionText}>
               İlaç alma zamanınız geldi. Ne yapmalısınız?
             </ThemedText>
 
             <View style={styles.buttonGroup}>
-              <PrimaryButton 
-                title={loading ? "Kaydediliyor..." : "Şimdi İç"} 
-                onPress={() => handleDecision(true)} 
+              <PrimaryButton
+                title={loading ? 'Kaydediliyor...' : 'Şimdi İç'}
+                onPress={() => handleDecision(true)}
                 disabled={loading}
-                style={styles.buttonSpacing} 
+                style={styles.buttonSpacing}
               />
-              <SecondaryButton 
-                title="Daha Sonra İç" 
+              <SecondaryButton
+                title="Daha Sonra İç"
                 disabled={loading}
-                onPress={() => handleDecision(false)} 
+                onPress={() => handleDecision(false)}
               />
             </View>
           </BlurView>
         </Animated.View>
+
       </SafeAreaView>
     </View>
   );
@@ -118,14 +132,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000',
   },
-  overlay: {
+  background: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.7)',
+    backgroundColor: '#0a0a0a',
   },
   safeArea: {
     flex: 1,
     justifyContent: 'space-between',
   },
+  // Üst bar
   topSection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -149,6 +164,34 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.pill,
   },
+  // 3D Model alanı
+  modelContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.lg,
+  },
+  modelViewer: {
+    width: '100%',
+    height: 280,
+  },
+  scenarioBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: Spacing.md,
+    backgroundColor: 'rgba(52, 211, 153, 0.15)',
+    paddingHorizontal: Spacing.md,
+    paddingVertical: 6,
+    borderRadius: BorderRadius.pill,
+    borderWidth: 1,
+    borderColor: 'rgba(52, 211, 153, 0.3)',
+  },
+  scenarioBadgeText: {
+    color: '#34d399',
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  // Alt panel
   panelContainer: {
     marginHorizontal: Spacing.sm,
     marginBottom: Spacing.lg,
@@ -170,10 +213,10 @@ const styles = StyleSheet.create({
   },
   questionText: {
     color: '#FFF',
-    fontSize: 22,
-    lineHeight: 30,
+    fontSize: 20,
+    lineHeight: 28,
     textAlign: 'center',
-    marginBottom: Spacing.xxl,
+    marginBottom: Spacing.xl,
   },
   buttonGroup: {
     gap: Spacing.xs,

@@ -8,6 +8,10 @@
     "scheme": "appkaraciger",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "assetBundlePatterns": [
+      "assets/**",
+      "assets/models/*.glb"
+    ],
     "ios": {
       "supportsTablet": true
     },
