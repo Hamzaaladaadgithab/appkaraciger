@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
-import Animated, { SlideInDown, FadeIn } from 'react-native-reanimated';
+import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
+import Animated, { FadeIn, SlideInDown } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { LiverModelViewer } from '@/components/ar/LiverModelViewer';
 import { ThemedText } from '@/components/themed-text';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { SecondaryButton } from '@/components/ui/SecondaryButton';
-import { LiverModelViewer } from '@/components/ar/LiverModelViewer';
-import { Colors, Spacing, BorderRadius } from '@/constants/theme';
-import { useAuthStore } from '@/store/authStore';
+import { BorderRadius, Spacing } from '@/constants/theme';
 import { DatabaseManager } from '@/services/DatabaseManager';
+import { useAuthStore } from '@/store/authStore';
 
 export default function ScenarioPsikolojiScreen() {
   const router = useRouter();

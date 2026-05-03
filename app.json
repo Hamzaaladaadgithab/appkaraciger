@@ -13,9 +13,11 @@
       "assets/models/*.glb"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.karaciger.app"
     },
     "android": {
+      "package": "com.karaciger.app",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
